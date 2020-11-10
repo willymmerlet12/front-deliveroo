@@ -1,7 +1,7 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
-const List = ({ data, isLoading }) => {
+const List = ({ data, isLoading, cart, setCart }) => {
   return isLoading ? (
     <span>en cours de chargement</span>
   ) : (
@@ -20,7 +20,26 @@ const List = ({ data, isLoading }) => {
                       {menu.meals.map((meals, id) => {
                         return (
                           <div>
-                            <div className="menuItem">
+                            <div
+                              key={id}
+                              className="menuItem"
+                              onClick={() => {
+                                const newCart = [...cart];
+                                newCart.push({
+                                  id: meals.id,
+                                  title: meals.title,
+                                  price: meals.price,
+                                  qty: 1,
+                                });
+
+                                for (let i = 0; i < newCart.length; i++) {
+                                  if (meals.id === newCart[i].id) {
+                                    newCart[i].qty++;
+                                  }
+                                }
+                                setCart(newCart);
+                              }}
+                            >
                               <div className="menuItem-card">
                                 <div className="menuitem-texts">
                                   <div className="tit">

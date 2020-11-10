@@ -3,14 +3,21 @@ import "./App.css";
 import axios from "axios";
 import Header from "./components/Header";
 import List from "./components/List";
+import Cart from "./components/Cart";
 
 import { library } from "@fortawesome/fontawesome-svg-core";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
+import {
+  faStar,
+  faPlusCircle,
+  faMinusCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
-library.add(faStar);
+library.add(faStar, faPlusCircle, faMinusCircle);
 function App() {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [counters, setCounters] = useState([0]);
+  const [cart, setCart] = useState([]);
 
   const fetchData = async () => {
     try {
@@ -30,10 +37,15 @@ function App() {
 
   return (
     <>
-      <div className="container">
-        <Header data={data} isLoading={isLoading} />
-        <List data={data} isLoading={isLoading} />
-      </div>
+      <Header data={data} isLoading={isLoading} />
+      <List data={data} isLoading={isLoading} cart={cart} setCart={setCart} />
+
+      <Cart
+        counters={counters}
+        setCounters={setCounters}
+        cart={cart}
+        setCart={setCart}
+      />
     </>
   );
 }

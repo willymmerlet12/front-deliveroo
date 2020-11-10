@@ -148,3 +148,7 @@ div {
   font-size: 21px;
   color: #2e3333;
 }
+.counter {
+  display: flex;
+  flex-direction: row;
+}
