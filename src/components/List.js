@@ -29,7 +29,7 @@ const List = ({ data, isLoading, cart, setCart }) => {
                                   id: meals.id,
                                   title: meals.title,
                                   price: meals.price,
-                                  qty: 1,
+                                  qty: 0,
                                 });
 
                                 for (let i = 0; i < newCart.length; i++) {
