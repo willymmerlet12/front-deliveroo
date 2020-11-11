@@ -16,7 +16,6 @@ library.add(faStar, faPlusCircle, faMinusCircle);
 function App() {
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [counters, setCounters] = useState([0]);
   const [cart, setCart] = useState([]);
 
   const fetchData = async () => {
@@ -40,12 +39,7 @@ function App() {
       <Header data={data} isLoading={isLoading} />
       <List data={data} isLoading={isLoading} cart={cart} setCart={setCart} />
 
-      <Cart
-        counters={counters}
-        setCounters={setCounters}
-        cart={cart}
-        setCart={setCart}
-      />
+      <Cart cart={cart} setCart={setCart} />
     </>
   );
 }

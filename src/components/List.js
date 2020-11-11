@@ -25,17 +25,21 @@ const List = ({ data, isLoading, cart, setCart }) => {
                               className="menuItem"
                               onClick={() => {
                                 const newCart = [...cart];
-                                newCart.push({
-                                  id: meals.id,
-                                  title: meals.title,
-                                  price: meals.price,
-                                  qty: 0,
-                                });
-
+                                let isFound = false;
                                 for (let i = 0; i < newCart.length; i++) {
-                                  if (meals.id === newCart[i].id) {
+                                  if (newCart[i].id === meals.id) {
                                     newCart[i].qty++;
+                                    isFound = true;
+                                    break;
                                   }
+                                }
+                                if (isFound === false) {
+                                  newCart.push({
+                                    id: meals.id,
+                                    title: meals.title,
+                                    price: meals.price,
+                                    qty: 1,
+                                  });
                                 }
                                 setCart(newCart);
                               }}
