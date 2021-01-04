@@ -1,32 +1,24 @@
 import React from "react";
-import Logo from "../img/deliv.png";
+import TopBar from "./TopBar";
+import RestaurantInfos from "./RestaurantInfos";
+import RestaurantInfosLoader from "./RestaurantInfosLoader";
 
-const Header = ({ data, isLoading }) => {
-  return isLoading ? (
-    <span>en cours de chargement</span>
-  ) : (
-    <>
-      <header className="Header">
-        <div className="topBar">
-          <div className="topBar--center">
-            <img src={Logo} alt="" />
-          </div>
-        </div>
-        <div className="section1">
-          <div className="section11">
-            <div className="section111">
-              <h1>{data.restaurant.name}</h1>
-              <p className="descri">{data.restaurant.description}</p>
-            </div>
-            <img
-              className="img-cov"
-              src={data.restaurant.picture}
-              alt="img-cober"
-            />
-          </div>
-        </div>
-      </header>
-    </>
+const Header = (props) => {
+  const { restaurant } = props;
+
+  return (
+    <header className="Header">
+      <TopBar />
+      {restaurant === null ? (
+        <RestaurantInfosLoader />
+      ) : (
+        <RestaurantInfos
+          name={restaurant.name}
+          description={restaurant.description}
+          cover={restaurant.picture}
+        />
+      )}
+    </header>
   );
 };
 

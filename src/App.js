@@ -2,46 +2,85 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import axios from "axios";
 import Header from "./components/Header";
-import List from "./components/List";
-import Cart from "./components/Cart";
+import Content from "./components/Content";
 
-import { library } from "@fortawesome/fontawesome-svg-core";
-import {
-  faStar,
-  faPlusCircle,
-  faMinusCircle,
-} from "@fortawesome/free-solid-svg-icons";
-
-library.add(faStar, faPlusCircle, faMinusCircle);
-function App() {
-  const [data, setData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+const App = () => {
+  const [data, setData] = useState(null);
   const [cart, setCart] = useState([]);
 
-  const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        "https://backend-deliveroo-w.herokuapp.com/"
-      );
-      setData(response.data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error.message);
+  const addItem = (itemId) => {
+    const exist = cart.find((cartItem) => cartItem.id === itemId);
+    if (exist) {
+      const index = cart.indexOf(exist);
+      const nextCart = [...cart];
+      nextCart[index] = {
+        ...nextCart[index],
+        amount: nextCart[index].amount + 1,
+      };
+      setCart(nextCart);
+    } else {
+      // add
+      // find item in data
+      let item = null;
+      data.categories.forEach((category) => {
+        category.meals.forEach((menu) => {
+          if (menu.id === itemId) {
+            item = menu;
+          }
+        });
+      });
+      if (item === null) {
+        console.error(`Cannot find item ${itemId}`);
+        return;
+      }
+      const nextCart = [...cart];
+      nextCart.push({
+        id: itemId,
+        title: item.title,
+        price: item.price,
+        amount: 1,
+      });
+      setCart(nextCart);
     }
   };
 
+  const removeItem = (itemId) => {
+    const exist = cart.find((cartItem) => cartItem.id === itemId);
+    if (!exist) {
+      console.error(`Cannot remove item not in cart !`);
+      return;
+    }
+    const index = cart.indexOf(exist);
+    const nextCart = [...cart];
+    nextCart[index] = {
+      ...nextCart[index],
+      amount: nextCart[index].amount - 1,
+    };
+    const cartNotZero = nextCart.filter((cartItem) => cartItem.amount > 0);
+    setCart(cartNotZero);
+  };
+
   useEffect(() => {
+    const fetchData = async () => {
+      const response = await axios.get("https://zmzm-deliveroo.herokuapp.com/");
+
+      setData(response.data);
+    };
+
     fetchData();
   }, []);
 
   return (
-    <>
-      <Header data={data} isLoading={isLoading} />
-      <List data={data} isLoading={isLoading} cart={cart} setCart={setCart} />
-
-      <Cart cart={cart} setCart={setCart} />
-    </>
+    <div>
+      <Header restaurant={data ? data.restaurant : null} />
+      <Content
+        menu={data ? data.categories : null}
+        cart={cart}
+        addItem={addItem}
+        removeItem={removeItem}
+      />
+    </div>
   );
-}
+};
 
 export default App;
