@@ -26,5 +26,5 @@ https://deliveroo-cart.netlify.app/
 
 ## Packages Features
 
-1. Axios
-2. React
+1. [Axios](https://www.npmjs.com/package/axios)
+2. [React](https://reactjs.org/)
